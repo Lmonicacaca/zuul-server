@@ -38,7 +38,7 @@ public class PreFilter extends ZuulFilter {
 
     @Override
     public boolean shouldFilter() {
-        return false;
+        return true;
     }
 
     /**
@@ -50,7 +50,7 @@ public class PreFilter extends ZuulFilter {
     private Object setErrorMsg(RequestContext ctx, Map<String,Object> map){
         String resBody = JSONObject.toJSONString(map);
         HttpServletResponse response = ctx.getResponse();
-        response.setHeader("contentType","application/json;charset=utf-8");
+        response.setHeader("content-type","application/json;charset=utf-8");
         logger.info("返回明文类容："+resBody);
         ctx.setResponseBody(resBody);
         ctx.setSendZuulResponse(false);
