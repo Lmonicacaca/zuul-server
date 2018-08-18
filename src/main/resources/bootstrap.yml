@@ -1,0 +1,22 @@
+#配置注册中心，向eureka注册服务
+eureka:
+  should-use-dns: false
+  instance:
+    prefer-ip-address: true  #显示实例的IP配置
+    instance-id: ${spring.application.name}:${server.port}
+  client:
+    register-with-eureka: true
+    prefer-same-zone-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:9911/eureka/
+
+#配置路由转发
+zuul:
+  routes:
+    api-my_first_springboot:
+      path: /my_first_springboot/**  #过滤请求的路径
+      serviceId: my_first_springboot #转发的服务名
+    api-refund:
+      path: /refund/**  #过滤请求的路径
+      serviceId: refund #转发的服务名
