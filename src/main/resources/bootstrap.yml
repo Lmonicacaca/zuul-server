@@ -20,3 +20,4 @@ zuul:
     api-refund:
       path: /refund/**  #过滤请求的路径
       serviceId: refund #转发的服务名
+
