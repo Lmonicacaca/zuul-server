@@ -17,6 +17,9 @@ zuul:
     api-my_first_springboot:
       path: /my_first_springboot/**  #过滤请求的路径
       serviceId: my_first_springboot #转发的服务名
+    api-pay-admin:
+      path: /pay-admin/**  #过滤请求的路径
+      serviceId: pay-admin #转发的服务名
     api-refund:
       path: /refund/**  #过滤请求的路径
       serviceId: refund #转发的服务名
