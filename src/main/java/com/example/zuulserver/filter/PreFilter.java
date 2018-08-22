@@ -1,16 +1,23 @@
 package com.example.zuulserver.filter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.zuulserver.commons.Config;
+import com.example.zuulserver.rsa.Decrypt;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
+import com.netflix.zuul.http.ServletInputStreamWrapper;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,6 +78,34 @@ public class PreFilter extends ZuulFilter {
             map.put("Msg","token为空");
             return this.setErrorMsg(ctx,map);
         }
+
+        try{
+            String body = IOUtils.toString(request.getInputStream(), "UTF-8");
+            //解密数据
+            Map<String,String> bodyMap = JSONObject.parseObject(body,Map.class);
+            String decrypt = Decrypt.decrypt(bodyMap.get("key"), bodyMap.get("iv"), bodyMap.get("cipher"), Config.private_key);
+            byte[] decryptBytes = decrypt.getBytes();
+            ctx.setRequest(new HttpServletRequestWrapper(getCurrentContext().getRequest()) {
+                @Override
+                public ServletInputStream getInputStream() throws IOException {
+                    return new ServletInputStreamWrapper(decryptBytes);
+                }
+
+                @Override
+                public int getContentLength() {
+                    return decryptBytes.length;
+                }
+
+                @Override
+                public long getContentLengthLong() {
+                    return decryptBytes.length;
+                }
+            });
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         return null;
     }
 }
