@@ -15,9 +15,22 @@ eureka:
 zuul:
   routes:
     api-my_first_springboot:
-      path: /my_first_springboot/**  #过滤请求的路径
-      serviceId: my_first_springboot #转发的服务名
+      path: /com-port/**  #过滤请求的路径
+      serviceId: com-port #转发的服务名
     api-admin:
-      path: /pay-admin/**  #过滤请求的路径
-      serviceId: pay-admin #转发的服务名
+      path: /data-user/**  #过滤请求的路径
+      serviceId: data-user #转发的服务名
+  host:
+    connect-timeout-millis: 15000 #HTTP连接超时要比Hystrix的大
+    socket-timeout-millis: 60000   #socket超时
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 10000
 
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000

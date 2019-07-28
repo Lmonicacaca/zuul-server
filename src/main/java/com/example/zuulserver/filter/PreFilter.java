@@ -82,9 +82,9 @@ public class PreFilter extends ZuulFilter {
         try{
             String body = IOUtils.toString(request.getInputStream(), "UTF-8");
             //解密数据
-            Map<String,String> bodyMap = JSONObject.parseObject(body,Map.class);
-            String decrypt = Decrypt.decrypt(bodyMap.get("key"), bodyMap.get("iv"), bodyMap.get("cipher"), Config.private_key);
-            byte[] decryptBytes = decrypt.getBytes();
+//            Map<String,String> bodyMap = JSONObject.parseObject(body,Map.class);
+//            String decrypt = Decrypt.decrypt(bodyMap.get("key"), bodyMap.get("iv"), bodyMap.get("cipher"), Config.private_key);
+            final byte[] decryptBytes = body.getBytes();
             ctx.setRequest(new HttpServletRequestWrapper(getCurrentContext().getRequest()) {
                 @Override
                 public ServletInputStream getInputStream() throws IOException {
