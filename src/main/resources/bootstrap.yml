@@ -9,7 +9,7 @@ eureka:
     prefer-same-zone-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:9911/eureka/
+      defaultZone: http://localhost:9911/eureka/,http://localhost:9912/eureka/
 
 #配置路由转发
 zuul:
